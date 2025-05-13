@@ -12,11 +12,10 @@ def detNumero():
 # Definicion de la funcion objetivo
 def funcionObjetivo(x):
 
-    return (x/(2**30)-1)**2
+    return (x/((2**30)-1))**2
 
 # funcion para generar la poblacion inicial
 def generarPoblacion(numeroIndividuos, tamano):#Tamaño de la cadena binaria
-    
     poblacion = []
     for i in range(numeroIndividuos):
         individuo=[]
