@@ -4,6 +4,7 @@ from funciones import generarPoblacion,ruleta,torneo,decimal,funcionObjetivo,may
 from opcionA import opcionA
 from opcionB import opcionB
 from opcionC import opcionC
+from opcionD import opcionD
 #from rich import print
 def menu():
     
@@ -26,3 +27,7 @@ if op==2:
     opcionB()
 if op==3:
     opcionC()
+if op == 4:
+    opcionD()
+if op==5:
+    input("Saliendo, presione una tecla para continuar . . .")
