@@ -1,5 +1,7 @@
 import random
 import math
+import matplotlib.pyplot as plt
+import numpy as np
 #Funcion que determina si es 0 o 1
 def detNumero():
 
@@ -64,7 +66,7 @@ def fitnes(poblacion, numeroIndividuos):
     return fitness 
 
 #CROSSOVER 
-def CROSSOVER(padre1,padre2) :
+def CROSSOVER(padre1,padre2,porcentaje=int) :
     
     nRandom=round(random.random(),2)
     hijo1=[]
@@ -73,7 +75,7 @@ def CROSSOVER(padre1,padre2) :
     
     nCromosomas=len(padre1)-1
 
-    if nRandom<=0.75:                     #posibilidad del crossover 75%
+    if nRandom<=porcentaje:                     #posibilidad del crossover 75%
         corte=random.randint(0,nCromosomas)
         for i in range(corte):
             hijo1.append(padre1[i])
@@ -90,11 +92,11 @@ def CROSSOVER(padre1,padre2) :
         return crossover
 
 #MUTACION 
-def mutacion (hijo):
+def mutacion (hijo,porcentaje):
     
     nRandom=round(random.random(),2)
     mutacion=False
-    if nRandom<=0.05:                               #probabilidad de mutacion 5%
+    if nRandom<=porcentaje:                               #probabilidad de mutacion 5%
         mutado=random.randint(0,29)
         if hijo[mutado]== 1:
             hijo[mutado]=0
@@ -173,3 +175,38 @@ def poblacionelite(poblacionE,mayor1,mayor2):
     pobelite.append(mayor1)
     pobelite.append(mayor2)
     return pobelite
+
+def pasaje_arreglo(array):
+    decimales=[]
+    for i in range (len(array)):
+        x=decimal(array[i])
+        y=funcionObjetivo(x)
+        decimales.append(y)
+    return decimales
+
+def graficar_convergencia(minimos, maximos, promedios, titulo_grafica):
+
+        # Crea el eje X, que corresponde al número de generaciones
+        generaciones = range(1, len(minimos) + 1)
+
+        # Crea la figura y los ejes para la gráfica
+        plt.figure(figsize=(12, 7))
+
+        # Dibuja cada línea (Mínimo, Máximo, Promedio)
+        plt.plot(generaciones, maximos, color='g', linestyle='-', marker='o', markersize=4, label='Máximo Fitness')
+        plt.plot(generaciones, promedios, color='b', linestyle='-', marker='o', markersize=4, label='Promedio Fitness')
+        plt.plot(generaciones, minimos, color='r', linestyle='-', marker='o', markersize=4, label='Mínimo Fitness')
+
+        # Añade Título y etiquetas a los ejes
+        plt.title(titulo_grafica, fontsize=16)
+        plt.xlabel('Generación', fontsize=12)
+        plt.ylabel('Valor de la Función Objetivo (Fitness)', fontsize=12)
+
+        # Añade la leyenda para identificar cada línea
+        plt.legend()
+
+        # Añade una cuadrícula para facilitar la lectura
+        plt.grid(True)
+
+        # Muestra la gráfica
+        plt.show()
