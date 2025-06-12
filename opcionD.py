@@ -40,7 +40,7 @@ def opcionD():
             padre2=ruleta(poblacion,fit)
         print("los padres elegidos son:")
         print (padre1,padre2)
-        porcentaje=10
+        porcentaje=0
         cross=CROSSOVER(padre1,padre2,porcentaje)
         if cross==False:#puede no realizarce crossover
             print("--------------------------")
@@ -50,23 +50,28 @@ def opcionD():
             menores.append(menor)
             mayores.append(mayor)
             promedio.append(prom/10)
-            mutaciones.append(False)
-            mutaciones1.append(False)
+            porcentaje=1
+            mutacionesp=[]
+            mutacionesp,muta1=mutacion(padre1,porcentaje)
+            mutacionesp,muta=mutacion(padre2,porcentaje)
+            mutaciones.append(muta)
+            mutaciones1.append(muta1)
 
         else:
             print(cross)
-            porcentaje=0.05
-            cross[0],muta1=mutacion(cross[0],porcentaje)
-            cross[1],muta=mutacion(cross[1],porcentaje)
+            porcentaje=1
+            mutacionesp=[]
+            mutacionesp,muta1=mutacion(padre1,porcentaje)
+            mutacionesp,muta=mutacion(padre2,porcentaje)
             mutaciones.append(muta)
             mutaciones1.append(muta1)
             print("mutacion:",muta, muta1)
             #reemplazamos los padres x los hijos
             for i in range(0,10):
                 if padre1==poblacion[i]:
-                    poblacion[i]=cross[0]
+                    poblacion[i]=mutacionesp[0]
                 elif padre2==poblacion[i]:
-                    poblacion[i]=cross[1]
+                    poblacion[i]=mutacionesp[1]
             fit=fitnes(poblacion,10)
             acumdeci=0
             prom=0
