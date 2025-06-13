@@ -1,6 +1,6 @@
 
 
-from funciones import generarPoblacion,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo
+from funciones import generarPoblacion,mutacion_D,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo
 from opcionA import opcionA
 from opcionB import opcionB
 from opcionC import opcionC

@@ -105,6 +105,16 @@ def mutacion (hijo,porcentaje):
         mutacion=True
         return hijo , mutacion
     else: return hijo , mutacion
+#mutacion para punto D
+def mutacion_D (hijo):
+    mutado=random.randint(0,29)
+    if hijo[mutado]== 1:
+        hijo[mutado]=0
+    else:
+        hijo[mutado]=1
+    mutacion=True
+    return hijo , mutacion
+
 
 #ruleta
 def ruleta(poblacion:list, fitnes:list):

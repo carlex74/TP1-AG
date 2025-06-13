@@ -1,4 +1,4 @@
-from funciones import generarPoblacion,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,graficar_convergencia,pasaje_arreglo
+from funciones import generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,graficar_convergencia,pasaje_arreglo
 import matplotlib.pyplot as plt
 import numpy as np
 ########################################################       OPCION B           #############################################################################
