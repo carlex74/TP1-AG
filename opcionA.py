@@ -1,4 +1,4 @@
-from funciones import generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia
+from funciones import limpiar_pantalla,menu_iteraciones,generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia
 import matplotlib.pyplot as plt
 import numpy as np
 ################################################################      OPCION A      ###########################################################################################
@@ -23,17 +23,8 @@ def opcionA():
         acum+=fit[i]
         prom+=funcionObjetivo(deci)
     print("___________________________________________________________________________________________________________________________________")
-    mayor,menor=mayorminimo(poblacion)
-    menores.append(menor)
-    mayores.append(mayor)
-    print("El mayor gen es:", mayor)
-    print("El menor gen es:", menor)
-    print("El promedio de la funcion objetivo es:", prom/10)
-    promedio.append(prom/10)
-    print("suma de decimales:", acumdeci)
-    print(acum)
-
-    for t in range(199):
+    ciclos=menu_iteraciones()
+    for t in range(ciclos-1):
         padre1=ruleta(poblacion,fit)
         padre2=ruleta(poblacion,fit)
         while padre2 == padre1: #verificamos que el padre no se repita
@@ -88,33 +79,28 @@ def opcionA():
             promedio.append(prom/10)
             print("suma de decimales:", acumdeci)
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 1 a 20 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
-    print("                                     MAYOR                 MENOR                PROMEDIO                         MUTACION")
-    for i in range (20):
-        print("        En la iteracion",i+1,"       ",decimal(mayores[i]),"         ",decimal(menores[i]), "        ", promedio[i],"               ",mutaciones[i],mutaciones1[i])
+    print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                MAYOR                 MENOR                PROMEDIO                         ")
+    for i in range (ciclos-1):
+        print("        En la iteracion",i+1,"       ",mayores[i],"       ",round(funcionObjetivo(decimal(mayores[i])),3),"         ",round(funcionObjetivo(decimal(menores[i])),3), "        ", round(promedio[i],3))
 
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 20 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
-    print("                                     MAYOR                 MENOR                PROMEDIO")
-    for i in range (20,99):
-        print("        En la iteracion",i+1,"       ",decimal(mayores[i]),"         ",decimal(menores[i]), "        ", promedio[i],"               ",mutaciones[i],mutaciones1[i])
-
-    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 100 a 200 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
-    print("                                     MAYOR                 MENOR                PROMEDIO")
-    for i in range (100,199):
-        print("        En la iteracion",i+1,"       ",decimal(mayores[i]),"         ",decimal(menores[i]), "        ", promedio[i],"               ",mutaciones[i],mutaciones1[i])
-    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
+    print (promedio)
     decimales_mayores=pasaje_arreglo(mayores)
     decimales_menores=pasaje_arreglo(menores)
 
     # --- 3. Generar las tres gráficas solicitadas ---
 
     # Gráfica para 20 iteraciones
-    graficar_convergencia(decimales_menores[:20], decimales_mayores[:20], promedio[:20], 'Evolución del Fitness (20 Generaciones)')
+    if ciclos==20:
+        graficar_convergencia(decimales_menores[:20], decimales_mayores[:20], promedio[:20], 'Evolución del Fitness (20 Generaciones)')
 
     # Gráfica para 100 iteraciones
-    graficar_convergencia(decimales_menores[:100], decimales_mayores[:100], promedio[:100], 'Evolución del Fitness (100 Generaciones)')
+    if ciclos==100:
+        graficar_convergencia(decimales_menores[:100], decimales_mayores[:100], promedio[:100], 'Evolución del Fitness (100 Generaciones)')
 
     # Gráfica para 200 iteraciones
-    graficar_convergencia(decimales_menores[:200], decimales_mayores[:200], promedio[:200], 'Evolución del Fitness (200 Generaciones)')
+    if ciclos==200:
+        graficar_convergencia(decimales_menores[:200], decimales_mayores[:200], promedio[:200], 'Evolución del Fitness (200 Generaciones)')
 
    
     pausa=input()

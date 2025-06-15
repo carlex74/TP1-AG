@@ -1,17 +1,18 @@
 
 
-from funciones import generarPoblacion,mutacion_D,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo
+from funciones import limpiar_pantalla,menu_iteraciones,generarPoblacion,mutacion_D,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo
 from opcionA import opcionA
 from opcionB import opcionB
 from opcionC import opcionC
 from opcionD import opcionD
+
 #from rich import print
 def menu():
     
     print("--------------BIENVENIDOS AL TP--------- ------------")
     print("             Elija la opcion deseada:                ")
-    print("          1-AG ruleta de 20, 100 y 200")
-    print("          2-AG torneo de 20, 100 y 200")
+    print("          1-AG ruleta ")
+    print("          2-AG torneo ")
     print("          3-AG ruleta elitista")
     print("          4-AG variante propia")
     print("          5-salida")

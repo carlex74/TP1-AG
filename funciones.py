@@ -2,6 +2,12 @@ import random
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+
+#limpiar pantalla
+def limpiar_pantalla():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 #Funcion que determina si es 0 o 1
 def detNumero():
 
@@ -27,7 +33,6 @@ def generarPoblacion(numeroIndividuos, tamano):#Tamaño de la cadena binaria
     
     return poblacion
 
-
 # pasaje de un binario a decimal
 def decimal(binario):
     
@@ -38,8 +43,6 @@ def decimal(binario):
         puntero+=1
 
     return decimal
-
-
 
 # Funcion fitness
 def fitnes(poblacion, numeroIndividuos):
@@ -65,6 +68,29 @@ def fitnes(poblacion, numeroIndividuos):
 
     return fitness 
 
+#fitnes con porcentajes menos de 1
+def fitnes_1(poblacion, numeroIndividuos):
+    
+    acum = 0
+    fitness = []
+    indice = 0
+
+    #Acumula la sumatoria de n individuos
+    while indice < numeroIndividuos:
+        x = decimal(poblacion[indice])
+        acum += funcionObjetivo(x)
+        indice += 1
+
+    indice = 0
+
+    #Determina el % de esa sumatoria
+    while indice < numeroIndividuos:
+        x = decimal(poblacion[indice])
+        fit = round((funcionObjetivo(x) / acum),3)
+        fitness.append(fit)
+        indice += 1
+
+    return fitness 
 #CROSSOVER 
 def CROSSOVER(padre1,padre2,porcentaje=int) :
     
@@ -105,6 +131,7 @@ def mutacion (hijo,porcentaje):
         mutacion=True
         return hijo , mutacion
     else: return hijo , mutacion
+
 #mutacion para punto D
 def mutacion_D (hijo):
     mutado=random.randint(0,29)
@@ -114,7 +141,6 @@ def mutacion_D (hijo):
         hijo[mutado]=1
     mutacion=True
     return hijo , mutacion
-
 
 #ruleta
 def ruleta(poblacion:list, fitnes:list):
@@ -186,14 +212,15 @@ def poblacionelite(poblacionE,mayor1,mayor2):
     pobelite.append(mayor2)
     return pobelite
 
+#pasaje de todo un arreglo de binario a decimal y de decimales a fitnes
 def pasaje_arreglo(array):
     decimales=[]
     for i in range (len(array)):
-        x=decimal(array[i])
-        y=funcionObjetivo(x)
+        y=round(funcionObjetivo(decimal(array[i])),3)
         decimales.append(y)
     return decimales
 
+#graficas
 def graficar_convergencia(minimos, maximos, promedios, titulo_grafica):
 
         # Crea el eje X, que corresponde al número de generaciones
@@ -220,3 +247,16 @@ def graficar_convergencia(minimos, maximos, promedios, titulo_grafica):
 
         # Muestra la gráfica
         plt.show()
+
+#menu de iteraciones de 20, 100 y 200
+def menu_iteraciones():
+    print("-------------------------------------------------------------------")
+    iteracion=int(input("ingrese la cantidad de iteraciones deseadas (20, 100 o 200):"))
+    print("-------------------------------------------------------------------")
+    limpiar_pantalla()
+    while iteracion!=20 and iteracion!=100 and iteracion!=200:
+        print("-------------eror------------------------------------------")
+        iteracion=int(input("ingrese la cantidad de iteraciones deseadas (20, 100 o 200):"))
+        print("-------------------------------------------------------------------")
+        limpiar_pantalla()
+    return iteracion
