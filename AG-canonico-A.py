@@ -33,7 +33,7 @@ def main():
     if op==2:
         opcionC(torneo)
     if op==3:
-        opcionCv2(ruleta)
+        opcionD(ruleta)
     if op == 4:
         opcionC(ruleta, 100)
     if op==5:

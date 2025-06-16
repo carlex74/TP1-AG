@@ -1,4 +1,12 @@
-lista = [1,2,3,4,5]
-for i in range(len(lista)):
-    print(i)
-    print(len(lista))
+from funciones import ordenarPoblacionSegunFitness, generarPoblacion, fitnes
+
+pob = generarPoblacion(15,10)
+fit = fitnes(pob,len(pob))
+
+print(fit)
+print(pob)
+print("--------------------------------------------------------------\n\n\n-----------------------------------------------------------")
+pob,fit = ordenarPoblacionSegunFitness(pob,fit)
+
+print(fit)
+print(pob)

@@ -1,19 +1,44 @@
-from funciones import generarPoblacion,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia,mutacion_D
+from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia, ordenarPoblacionSegunFitness
 import matplotlib.pyplot as plt
 import numpy as np
 ################################################################      OPCION A      ###########################################################################################
 
-def opcionD():
-    poblacion=generarPoblacion(numeroIndividuos=10,tamano=30)
+def opcionD(metodoSeleccion, porcentajeMutacion = 0.05):
+
+# =============================================================================
+# Declaraciones iniciales
+# =============================================================================
     acum=0 #Acumula el fitnness
     acumdeci=0
+    porcentajeCrossover=0.75
+    #porcentajeMutacion=0.05
     prom=0
-    fit=fitnes(poblacion,10)
     menores=[]#Muestra final 
     mayores=[] #Muestra final 
     promedio=[]#Muestra final 
-    mutaciones=[] #Muestra final 
-    mutaciones1=[] #Muestra final 
+    mayoresFit=[]
+    menoresFit=[]
+
+# =============================================================================
+# Poblacion inicial
+# =============================================================================
+
+    poblacion=generarPoblacion(numeroIndividuos=10,tamano=30)
+    fit=fitnes(poblacion,len(poblacion))
+    poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
+    #Mayores y promedio                
+    mayor,menor=poblacion[0],poblacion[len(poblacion)-1]
+    menores.append(menor)
+    mayores.append(mayor)
+    for i in range (len(poblacion)):
+        deci=decimal(poblacion[i])
+        prom+=funcionObjetivo(deci)
+    promedio.append(prom/10)
+
+# =============================================================================
+# Printeo de poblacion inicial
+# =============================================================================
+
     print("_________________________________________POBLACION INICIAL_________________________________________________________________________")
     print("               arreglo binario                                                              decimal       funcion       fitnes")
     for i in range (0,10):
@@ -23,100 +48,124 @@ def opcionD():
         acum+=fit[i]
         prom+=funcionObjetivo(deci)
     print("___________________________________________________________________________________________________________________________________")
-    mayor,menor=mayorminimo(poblacion)
-    menores.append(menor)
-    mayores.append(mayor)
-    print("El mayor gen es:", mayor)
-    print("El menor gen es:", menor)
-    print("El promedio de la funcion objetivo es:", prom/10)
-    promedio.append(prom/10)
-    print("suma de decimales:", acumdeci)
-    print(acum)
 
-    for t in range(199):
-        padre1=ruleta(poblacion,fit)
-        padre2=ruleta(poblacion,fit)
-        while padre2 == padre1: #verificamos que el padre no se repita
-            padre2=ruleta(poblacion,fit)
-        print("los padres elegidos son:")
-        print (padre1,padre2)
-        porcentaje=0.75
-        cross=CROSSOVER(padre1,padre2,porcentaje)
-        if cross==False:#puede no realizarce crossover
-            print("--------------------------")
-            print(" NO SE REALIZO CROSSOVER")
-            print("--------------------------")
-            mayor,menor=mayorminimo(poblacion)
-            menores.append(menor)
-            mayores.append(mayor)
-            promedio.append(prom/10)
-            mutaciones.append(False)
-            mutaciones1.append(False)
+# =============================================================================
+# Iteraciones
+# =============================================================================
 
-        else:
-            print(cross)
-            cross[0],muta1=mutacion_D(cross[0])
-            cross[1],muta=mutacion_D(cross[1])
-            mutaciones.append(muta)
-            mutaciones1.append(muta1)
-            print("mutacion:",muta, muta1)
+    ciclos=cantidad_iteraciones()
+
+    for t in range(ciclos-1):
+
+        # =============================================================================
+        # Seleccion de elites
+        # =============================================================================
+        fit=fitnes(poblacion,len(poblacion))
+        #Ordena la poblacion segun su fitness
+        poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
+        #Separa los 2 mejores 
+        mayorIndiv1, mayorIndiv2 = poblacion[:2]
+        mayorFit1, mayorFit2 = fit[:2]
+        #Remueve los 2 mejores de la poblacion para hacer el crossover
+        poblacion.remove(mayorIndiv1)
+        poblacion.remove(mayorIndiv2)
+        fit.remove(mayorFit1)
+        fit.remove(mayorFit2)
+
+
+        padres = []
+
+        #Seleccion de padres
+        for i in range(int(len(poblacion)/2)): 
+            padres.append(((metodoSeleccion(poblacion,fit)),metodoSeleccion(poblacion,fit)))
+            """
+            #Verificar que no sea el mismo padre
+            while padres[i][0] == padres[i][1]: 
+                print("Dando vueltas?")
+                padres[i] = (padres[i][0],metodoSeleccion(poblacion,fit))
+            """
+
+
+        #Se hace el crossover
+        hijos = []
+        for i in range(len(padres)):
+            potencialesHijos = CROSSOVER(padres[i][0],padres[i][1],porcentajeCrossover)
+            if potencialesHijos != False:
+                hijos.append(potencialesHijos)
+            else:
+                #Si no se hace crossover se reemplazan los mismos padres en el array de hijos
+                hijos.append((padres[i][0],padres[i][1]))
+
+        for i in range(len(hijos)):
+            #Si no hay crossover no hay mutacion
+            if hijos[i]!=False:
+                hijo0,muta1=mutacion(hijos[i][0],porcentajeMutacion)
+                hijo1,muta=mutacion(hijos[i][0],porcentajeMutacion)    
+                hijos[i] = (hijo0,hijo1)
+
             #reemplazamos los padres x los hijos
-            for i in range(0,10):
-                if padre1==poblacion[i]:
-                    poblacion[i]=cross[0]
-                elif padre2==poblacion[i]:
-                    poblacion[i]=cross[1]
-            fit=fitnes(poblacion,10)
-            acumdeci=0
-            prom=0
-            print("_________________________________________POBLACION NUEVA_________________________________________________________________________")
-            print("               arreglo binario                                                              decimal       funcion       fitnes")
-            for i in range (0,10):
-                deci=decimal(poblacion[i])
-                acumdeci+=deci
-                print (poblacion[i], deci ,funcionObjetivo(deci),fit[i])
-                acum+=fit[i]
-                prom+=funcionObjetivo(deci)
-            print("___________________________________________________________________________________________________________________________________")
-            mayor,menor=mayorminimo(poblacion)
-            menores.append(menor)
-            mayores.append(mayor)
-            print("El mayor gen es:", mayor)
-            print("El menor gen es:", menor)
-            print("El promedio de la funcion objetivo es:", prom/10)
-            promedio.append(prom/10)
-            print("suma de decimales:", acumdeci)
+            poblacion[i] = hijos[i][0]
+            poblacion[len(poblacion)-i-1] = hijos[i][1]     
+
+        #Reordenar nueva poblacion
+        fit=fitnes(poblacion,len(poblacion))
+        #Ordena la poblacion segun su fitness
+        poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
+        #Calculo promedio poblacion
+        prom=0
+        for i in range (len(poblacion)):
+            deci=decimal(poblacion[i])
+            prom+=funcionObjetivo(deci)
+
+        #Volvemos a insertar los mejores individuos
+        poblacion.append(mayorIndiv1)
+        poblacion.append(mayorIndiv2)
+        fit.append(mayorFit1)
+        fit.append(mayorFit2)
+
+        #Ordena la poblacion segun su fitness
+        poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
+
+        #Mayores y promedio  
+        mayor = poblacion[0]
+        menor = poblacion[-1]     
+
+        mayorFit = fit[0]
+        menorFit = fit[-1]        
+        mayoresFit.append(mayorFit)
+        menoresFit.append(menorFit)
+
+        #mayor,menor=(poblacion[0],poblacion[-1])
+        menores.append(menor)
+        mayores.append(mayor)
+        promedio.append(prom/10)
+    
+# =============================================================================
+# Tabla final
+# =============================================================================    
+
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 1 a 20 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
-    print("                                     MAYOR                 MENOR                PROMEDIO                         MUTACION")
-    for i in range (20):
-        print("        En la iteracion",i+1,"       ",decimal(mayores[i]),"         ",decimal(menores[i]), "        ", promedio[i],"               ",mutaciones[i],mutaciones1[i])
+    print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                MAYOR                 MENOR                PROMEDIO                         ")
+    for i in range (ciclos-1):
+        print("        En la iteracion",i+1,"       ",mayores[i],"       ",round(funcionObjetivo(decimal(mayores[i])),3),"         ",round(funcionObjetivo(decimal(menores[i])),3), "        ", round(promedio[i],3))
 
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 20 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
-    print("                                     MAYOR                 MENOR                PROMEDIO")
-    for i in range (20,99):
-        print("        En la iteracion",i+1,"       ",decimal(mayores[i]),"         ",decimal(menores[i]), "        ", promedio[i],"               ",mutaciones[i],mutaciones1[i])
-
-    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 100 a 200 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
-    print("                                     MAYOR                 MENOR                PROMEDIO")
-    for i in range (100,199):
-        print("        En la iteracion",i+1,"       ",decimal(mayores[i]),"         ",decimal(menores[i]), "        ", promedio[i],"               ",mutaciones[i],mutaciones1[i])
-    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
+    print (promedio)
     decimales_mayores=pasaje_arreglo(mayores)
     decimales_menores=pasaje_arreglo(menores)
 
-    # --- 3. Generar las tres gráficas solicitadas ---
+# =============================================================================
+# Graficas
+# =============================================================================
 
-    # Gráfica para 20 iteraciones
-    graficar_convergencia(decimales_menores[:20], decimales_mayores[:20], promedio[:20], 'Evolución del Fitness (20 Generaciones)')
-
-    # Gráfica para 100 iteraciones
-    graficar_convergencia(decimales_menores[:100], decimales_mayores[:100], promedio[:100], 'Evolución del Fitness (100 Generaciones)')
-
-    # Gráfica para 200 iteraciones
-    graficar_convergencia(decimales_menores[:200], decimales_mayores[:200], promedio[:200], 'Evolución del Fitness (200 Generaciones)')
+    # --- 3. Generar las gráficas solicitadas según la cantidad de generaciones (ciclos)---
+    graficar_convergencia(decimales_menores[:ciclos], decimales_mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)')
 
    
-    pausa=input()
-    op=True
+
+    input("Presione una tecla . . .")
+    op=input("Hacer otra corrida del mismo metodo?(y/n): ")
+    if op.lower() == 'y': opcionD(ruleta,porcentajeMutacion)
+
     return op
 ########################################################################################################################################################decimales_menores[:

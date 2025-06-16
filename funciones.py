@@ -38,7 +38,7 @@ def decimal(binario):
     
     decimal=0
     puntero=0
-    for i in range (0,30):
+    for i in range (len(binario)):
         decimal = decimal + binario[puntero]*(2**(29-puntero))
         puntero+=1
 
