@@ -122,7 +122,7 @@ def opcionA(metodoSeleccion, porcentajeMutacion = 0.05):
 
     input("Presione una tecla . . .")
     op=input("Hacer otra corrida del mismo metodo?(y/n): ")
-    if op.lower() == 'y': opcionA(ruleta)
+    if op.lower() == 'y': opcionA(ruleta,porcentajeMutacion)
 
     return op
 ########################################################################################################################################################decimales_menores[:

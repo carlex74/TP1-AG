@@ -110,8 +110,7 @@ def CROSSOVER(padre1,padre2,porcentaje=int) :
         for k in range(corte,nCromosomas+1):
             hijo1.append (padre2[k])
             hijo2.append(padre1[k])
-        hijos.append(hijo1)
-        hijos.append(hijo2)
+        hijos = hijo1,hijo2
         return hijos
     else:  
         crossover=False
@@ -148,7 +147,6 @@ def ruleta(poblacion, fitnes):
     eleccion = random.randint(0, sum(fitnes) )  
     ruleta = []
 
-    print(len(fitnes))
     for i in range(len(fitnes)):                    #las repeticiones es la cant de reps que se encontraran en la ruleta
         repeticiones = int(fitnes[i])  
         ruleta += [i] * repeticiones 
@@ -255,11 +253,13 @@ def cantidad_iteraciones():
     iteracion=int(input("ingrese la cantidad de iteraciones deseadas (20, 100 o 200):"))
     print("-------------------------------------------------------------------")
     limpiar_pantalla()
+    """
     while iteracion!=20 and iteracion!=100 and iteracion!=200:
         print("-------------eror------------------------------------------")
         iteracion=int(input("ingrese la cantidad de iteraciones deseadas (20, 100 o 200):"))
         print("-------------------------------------------------------------------")
         limpiar_pantalla()
+    """
     return iteracion
 
 def ordenarPoblacionSegunFitness(poblacion, fitness):

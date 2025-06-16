@@ -29,13 +29,13 @@ def main():
     op=menu()
 
     if op==1:
-        opcionA(ruleta)
+        opcionC(ruleta)
     if op==2:
-        opcionA(torneo)
+        opcionC(torneo)
     if op==3:
         opcionCv2(ruleta)
     if op == 4:
-        opcionA(ruleta, 100)
+        opcionC(ruleta, 100)
     if op==5:
         input("Saliendo, presione una tecla para continuar . . .")
     else:
