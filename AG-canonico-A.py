@@ -35,7 +35,7 @@ def main():
     if op==3:
         opcionCv2(ruleta)
     if op == 4:
-        opcionD()
+        opcionA(ruleta, 100)
     if op==5:
         input("Saliendo, presione una tecla para continuar . . .")
     else:

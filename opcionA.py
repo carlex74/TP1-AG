@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 ################################################################      OPCION A      ###########################################################################################
 
-def opcionA(metodoSeleccion):
+def opcionA(metodoSeleccion, porcentajeMutacion = 0.05):
 
 # =============================================================================
 # Declaraciones iniciales
@@ -13,7 +13,7 @@ def opcionA(metodoSeleccion):
     acum=0 #Acumula el fitnness
     acumdeci=0
     porcentajeCrossover=0.75
-    porcentajeMutacion=0.05
+    #porcentajeMutacion=0.05
     prom=0
     fit=fitnes(poblacion,10)
     menores=[]#Muestra final 
