@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 ################################################################      OPCION A      ###########################################################################################
 
-def opcionA(metodoSeleccion):
+def opcionCv2(metodoSeleccion):
 
 # =============================================================================
 # Declaraciones iniciales
@@ -40,13 +40,26 @@ def opcionA(metodoSeleccion):
 # Iteraciones
 # =============================================================================
 
-    ciclos=cantidad_iteraciones()
+    ciclos=100
 
     for t in range(ciclos-1):
+
         fit=fitnes(poblacion,len(poblacion))
 
         #Ordena la poblacion segun su fitness
         poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
+        #Separa los 2 mejores 
+        mayorIndiv1, mayorIndiv2 = poblacion[:2]
+        mayorFit1, mayorFit2 = fit[:2]
+
+        padre1=metodoSeleccion(poblacion,fit)
+        
+        poblacion.remove(mayorIndiv1)
+        poblacion.remove(mayorIndiv2)
+        fit.remove(mayorFit1)
+        fit.remove(mayorFit2)
+
+
 
         #Seleccion de padres
         padre1=metodoSeleccion(poblacion,fit)
@@ -74,39 +87,44 @@ def opcionA(metodoSeleccion):
             mutaciones1.append(muta1)
 
             #reemplazamos los padres x los hijos
-            for i in range(0,10):
+            for i in range(len(poblacion)):
                 if padre1==poblacion[i]:
                     poblacion[i]=cross[0]
                 elif padre2==poblacion[i]:
                     poblacion[i]=cross[1]
 
-
             #Calculo de promedio
             acumdeci=0
             prom=0
-            for i in range (0,10):
+            for i in range (len(poblacion)):
                 deci=decimal(poblacion[i])
                 prom+=funcionObjetivo(deci)
 
                 acumdeci+=deci #Estos dos creo q no hacen nada, pero no estoy seguro
                 acum+=fit[i]
 
+        #Volvemos a insertar los mejores individuos
+        poblacion.append(mayorIndiv1)
+        poblacion.append(mayorIndiv2)
+        fit.append(mayorFit1)
+        fit.append(mayorFit2)
+
         #Mayores y promedio                
-        mayor,menor=poblacion[0],poblacion[len(poblacion)-1]
+        mayor,menor=mayorIndiv1,poblacion[len(poblacion)-3]
         menores.append(menor)
         mayores.append(mayor)
-        promedio.append(prom/10)
+        promedio.append(prom/len(poblacion))
     
 # =============================================================================
 # Tabla final
 # =============================================================================    
 
-    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 1 a 20 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
+    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 1 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
     print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                MAYOR                 MENOR                PROMEDIO                         ")
     for i in range (ciclos-1):
         print("        En la iteracion",i+1,"       ",mayores[i],"       ",round(funcionObjetivo(decimal(mayores[i])),3),"         ",round(funcionObjetivo(decimal(menores[i])),3), "        ", round(promedio[i],3))
 
-    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 20 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
+    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 1 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
     print (promedio)
     decimales_mayores=pasaje_arreglo(mayores)
     decimales_menores=pasaje_arreglo(menores)
@@ -119,10 +137,6 @@ def opcionA(metodoSeleccion):
     graficar_convergencia(decimales_menores[:ciclos], decimales_mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)')
 
    
-
+   
     input("Presione una tecla . . .")
-    op=input("Hacer otra corrida del mismo metodo?(y/n): ")
-    if op.lower() == 'y': opcionA(ruleta)
-
-    return op
 ########################################################################################################################################################decimales_menores[:

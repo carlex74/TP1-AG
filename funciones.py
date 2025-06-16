@@ -143,10 +143,12 @@ def mutacion_D (hijo):
     return hijo , mutacion
 
 #ruleta
-def ruleta(poblacion:list, fitnes:list):
+def ruleta(poblacion, fitnes):
     
-    eleccion = random.randint(0, sum(fitnes) - 1)  
+    eleccion = random.randint(0, sum(fitnes) )  
     ruleta = []
+
+    print(len(fitnes))
     for i in range(len(fitnes)):                    #las repeticiones es la cant de reps que se encontraran en la ruleta
         repeticiones = int(fitnes[i])  
         ruleta += [i] * repeticiones 
@@ -159,7 +161,6 @@ def mayorminimo(poblacion):
 
 #torneo
 def torneo(poblacion, fitnes):
-    
     eleccion = []
     fitneselec=[]
     while len(eleccion) < 4:
@@ -249,7 +250,7 @@ def graficar_convergencia(minimos, maximos, promedios, titulo_grafica):
         plt.show()
 
 #menu de iteraciones de 20, 100 y 200
-def menu_iteraciones():
+def cantidad_iteraciones():
     print("-------------------------------------------------------------------")
     iteracion=int(input("ingrese la cantidad de iteraciones deseadas (20, 100 o 200):"))
     print("-------------------------------------------------------------------")
@@ -260,3 +261,13 @@ def menu_iteraciones():
         print("-------------------------------------------------------------------")
         limpiar_pantalla()
     return iteracion
+
+def ordenarPoblacionSegunFitness(poblacion, fitness):
+    # Combina las listas en pares y ordena según el fit (de mayor a menor)
+    pares_ordenados = sorted(zip(poblacion, fitness), key=lambda par: par[1], reverse=True)
+    
+    # Separa las listas ordenadas
+    poblacionOrdenada, fitnessOrdenado = zip(*pares_ordenados)
+    
+    # Convierte los resultados de tuplas a listas
+    return list(poblacionOrdenada), list(fitnessOrdenado)

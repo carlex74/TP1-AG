@@ -1,10 +1,12 @@
 
 
-from funciones import limpiar_pantalla,menu_iteraciones,generarPoblacion,mutacion_D,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo
+from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,mutacion_D,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo
 from opcionA import opcionA
 from opcionB import opcionB
 from opcionC import opcionC
 from opcionD import opcionD
+from opcionCv2 import opcionCv2
+
 
 #from rich import print
 def menu():
@@ -21,14 +23,24 @@ def menu():
     while op <1 or op>5:    
         op=int(input("opcion:"))
     return op
-op=menu()
-if op==1:
-    opcionA()
-if op==2:
-    opcionB()
-if op==3:
-    opcionC()
-if op == 4:
-    opcionD()
-if op==5:
-    input("Saliendo, presione una tecla para continuar . . .")
+
+def main():
+
+    op=menu()
+
+    if op==1:
+        opcionA(ruleta)
+    if op==2:
+        opcionA(torneo)
+    if op==3:
+        opcionCv2(ruleta)
+    if op == 4:
+        opcionD()
+    if op==5:
+        input("Saliendo, presione una tecla para continuar . . .")
+    else:
+        print("NoSale")
+        main()
+
+
+main()

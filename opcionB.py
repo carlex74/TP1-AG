@@ -42,6 +42,8 @@ def opcionB():
         print (padre1,padre2)
         porcentaje=0.75
         cross=CROSSOVER(padre1,padre2,porcentaje)
+
+        
         if cross==False:#puede no realizarce crossover
             print("--------------------------")
             print(" NO SE REALIZO CROSSOVER")
