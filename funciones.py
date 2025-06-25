@@ -144,7 +144,7 @@ def mutacion_D (hijo):
 #ruleta
 def ruleta(poblacion, fitnes):
     
-    eleccion = random.randint(0, sum(fitnes) )  
+    eleccion = random.randint(0, int(sum(fitnes)) )  
     ruleta = []
 
     for i in range(len(fitnes)):                    #las repeticiones es la cant de reps que se encontraran en la ruleta
@@ -211,7 +211,7 @@ def poblacionelite(poblacionE,mayor1,mayor2):
     pobelite.append(mayor2)
     return pobelite
 
-#pasaje de todo un arreglo de binario a decimal y de decimales a fitnes
+#pasaje de todo un arreglo de binario a decimal y de decimales se evalua en la obj
 def pasaje_arreglo(array):
     decimales=[]
     for i in range (len(array)):

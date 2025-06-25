@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 ################################################################      OPCION A      ###########################################################################################
 
-def opcionD(metodoSeleccion, porcentajeMutacion = 0.05):
+def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
 
 # =============================================================================
 # Declaraciones iniciales
@@ -33,7 +33,7 @@ def opcionD(metodoSeleccion, porcentajeMutacion = 0.05):
     for i in range (len(poblacion)):
         deci=decimal(poblacion[i])
         prom+=funcionObjetivo(deci)
-    promedio.append(prom/10)
+    promedio.append(prom/len(poblacion))
 
 # =============================================================================
 # Printeo de poblacion inicial
@@ -111,11 +111,6 @@ def opcionD(metodoSeleccion, porcentajeMutacion = 0.05):
         fit=fitnes(poblacion,len(poblacion))
         #Ordena la poblacion segun su fitness
         poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
-        #Calculo promedio poblacion
-        prom=0
-        for i in range (len(poblacion)):
-            deci=decimal(poblacion[i])
-            prom+=funcionObjetivo(deci)
 
         #Volvemos a insertar los mejores individuos
         poblacion.append(mayorIndiv1)
@@ -126,6 +121,12 @@ def opcionD(metodoSeleccion, porcentajeMutacion = 0.05):
         #Ordena la poblacion segun su fitness
         poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
 
+        #Calculo promedio poblacion
+        prom=0
+        for i in range (len(poblacion)):
+            deci=decimal(poblacion[i])
+            prom+=funcionObjetivo(deci)
+
         #Mayores y promedio  
         mayor = poblacion[0]
         menor = poblacion[-1]     
@@ -135,10 +136,9 @@ def opcionD(metodoSeleccion, porcentajeMutacion = 0.05):
         mayoresFit.append(mayorFit)
         menoresFit.append(menorFit)
 
-        #mayor,menor=(poblacion[0],poblacion[-1])
         menores.append(menor)
         mayores.append(mayor)
-        promedio.append(prom/10)
+        promedio.append(prom/len(poblacion))
     
 # =============================================================================
 # Tabla final
@@ -165,7 +165,7 @@ def opcionD(metodoSeleccion, porcentajeMutacion = 0.05):
 
     input("Presione una tecla . . .")
     op=input("Hacer otra corrida del mismo metodo?(y/n): ")
-    if op.lower() == 'y': opcionD(ruleta,porcentajeMutacion)
+    if op.lower() == 'y': AlgElitismo(ruleta,porcentajeMutacion)
 
     return op
 ########################################################################################################################################################decimales_menores[:

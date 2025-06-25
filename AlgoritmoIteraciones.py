@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 ################################################################      OPCION A      ###########################################################################################
 
-def opcionC(metodoSeleccion, porcentajeMutacion = 0.05):
+def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
 
 # =============================================================================
 # Declaraciones iniciales
@@ -100,10 +100,10 @@ def opcionC(metodoSeleccion, porcentajeMutacion = 0.05):
             prom+=funcionObjetivo(deci)
 
         #Mayores y promedio                
-        mayor,menor=poblacion[0],poblacion[len(poblacion)-1]
+        mayor,menor=poblacion[0],poblacion[-1]
         menores.append(menor)
         mayores.append(mayor)
-        promedio.append(prom/10)
+        promedio.append(prom/len(poblacion))
     
 # =============================================================================
 # Tabla final
@@ -130,7 +130,7 @@ def opcionC(metodoSeleccion, porcentajeMutacion = 0.05):
 
     input("Presione una tecla . . .")
     op=input("Hacer otra corrida del mismo metodo?(y/n): ")
-    if op.lower() == 'y': opcionC(ruleta,porcentajeMutacion)
+    if op.lower() == 'y': AlgoritmoIteraciones(ruleta,porcentajeMutacion)
 
     return op
 ########################################################################################################################################################decimales_menores[:

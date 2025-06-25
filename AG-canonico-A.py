@@ -1,14 +1,9 @@
 
 
-from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,mutacion_D,ruleta,torneo,decimal,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo
-from opcionA import opcionA
-from opcionB import opcionB
-from opcionC import opcionC
-from opcionD import opcionD
-from opcionCv2 import opcionCv2
+from funciones import ruleta,torneo
+from AlgoritmoIteraciones import AlgoritmoIteraciones
+from AlgoritmoElitismo import AlgElitismo
 
-
-#from rich import print
 def menu():
     
     print("--------------BIENVENIDOS AL TP--------- ------------")
@@ -29,13 +24,13 @@ def main():
     op=menu()
 
     if op==1:
-        opcionC(ruleta)
+        AlgoritmoIteraciones(ruleta)
     if op==2:
-        opcionC(torneo)
+        AlgoritmoIteraciones(torneo)
     if op==3:
-        opcionD(ruleta)
+        AlgElitismo(ruleta)
     if op == 4:
-        opcionC(ruleta, 100)
+        AlgoritmoIteraciones(ruleta, 100)
     if op==5:
         input("Saliendo, presione una tecla para continuar . . .")
     else:
