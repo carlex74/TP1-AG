@@ -1,4 +1,4 @@
-from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia, ordenarPoblacionSegunFitness
+from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia, ordenarPoblacionSegunFitness, pasajeBinarioAFuncionObjetivo, promedioPoblacion
 import matplotlib.pyplot as plt
 import numpy as np
 ################################################################      OPCION A      ###########################################################################################
@@ -27,7 +27,7 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
     fit=fitnes(poblacion,len(poblacion))
     poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
     #Mayores y promedio                
-    mayor,menor=poblacion[0],poblacion[len(poblacion)-1]
+    mayor,menor= pasajeBinarioAFuncionObjetivo(poblacion[0]), pasajeBinarioAFuncionObjetivo(poblacion[-1])
     menores.append(menor)
     mayores.append(mayor)
     for i in range (len(poblacion)):
@@ -53,7 +53,7 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
 # Iteraciones
 # =============================================================================
 
-    ciclos=cantidad_iteraciones()
+    ciclos= 100 #Cantidad de ciclos a realizar
 
     for t in range(ciclos-1):
 
@@ -78,13 +78,6 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
         #Seleccion de padres
         for i in range(int(len(poblacion)/2)): 
             padres.append(((metodoSeleccion(poblacion,fit)),metodoSeleccion(poblacion,fit)))
-            """
-            #Verificar que no sea el mismo padre
-            while padres[i][0] == padres[i][1]: 
-                print("Dando vueltas?")
-                padres[i] = (padres[i][0],metodoSeleccion(poblacion,fit))
-            """
-
 
         #Se hace el crossover
         hijos = []
@@ -107,29 +100,25 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
             poblacion[i] = hijos[i][0]
             poblacion[len(poblacion)-i-1] = hijos[i][1]     
 
+
+        #Volvemos a insertar los mejores individuos
+        poblacion.insert(0, mayorIndiv1)
+        poblacion.insert(1, mayorIndiv2)
+        fit.insert(0, mayorFit1)
+        fit.insert(1, mayorFit2)
+
+        # =============================================================================
         #Reordenar nueva poblacion
         fit=fitnes(poblacion,len(poblacion))
         #Ordena la poblacion segun su fitness
         poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
 
-        #Volvemos a insertar los mejores individuos
-        poblacion.append(mayorIndiv1)
-        poblacion.append(mayorIndiv2)
-        fit.append(mayorFit1)
-        fit.append(mayorFit2)
-
-        #Ordena la poblacion segun su fitness
-        poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
-
         #Calculo promedio poblacion
-        prom=0
-        for i in range (len(poblacion)):
-            deci=decimal(poblacion[i])
-            prom+=funcionObjetivo(deci)
+        promedio.append(promedioPoblacion(poblacion))
 
         #Mayores y promedio  
-        mayor = poblacion[0]
-        menor = poblacion[-1]     
+        mayor = pasajeBinarioAFuncionObjetivo(poblacion[0])
+        menor = pasajeBinarioAFuncionObjetivo(poblacion[-1])
 
         mayorFit = fit[0]
         menorFit = fit[-1]        
@@ -138,8 +127,10 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
 
         menores.append(menor)
         mayores.append(mayor)
-        promedio.append(prom/len(poblacion))
-    
+
+
+
+
 # =============================================================================
 # Tabla final
 # =============================================================================    
@@ -147,19 +138,17 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 1 a 20 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
     print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                MAYOR                 MENOR                PROMEDIO                         ")
     for i in range (ciclos-1):
-        print("        En la iteracion",i+1,"       ",mayores[i],"       ",round(funcionObjetivo(decimal(mayores[i])),3),"         ",round(funcionObjetivo(decimal(menores[i])),3), "        ", round(promedio[i],3))
+        print("        En la iteracion",i+1,"       ", mayores[i],"         ",menores[i],"        ", round(promedio[i],3))
 
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 20 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
     print (promedio)
-    decimales_mayores=pasaje_arreglo(mayores)
-    decimales_menores=pasaje_arreglo(menores)
 
 # =============================================================================
 # Graficas
 # =============================================================================
 
     # --- 3. Generar las gráficas solicitadas según la cantidad de generaciones (ciclos)---
-    graficar_convergencia(decimales_menores[:ciclos], decimales_mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)')
+    graficar_convergencia(menores[:ciclos], mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)')
 
    
 

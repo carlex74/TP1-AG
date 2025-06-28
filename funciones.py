@@ -44,8 +44,25 @@ def decimal(binario):
 
     return decimal
 
-# Funcion fitness
 def fitnes(poblacion, numeroIndividuos):
+    """Calcula el fitness de cada individuo en la población.
+    Devuelve una lista de fitness normalizada."""
+
+    fitness = []
+    poblacion = [pasajeBinarioAFuncionObjetivo(p) for p in poblacion]  # Convertir cada individuo a su valor de función objetivo
+
+    print("Poblacion: ", poblacion)
+    #Calcular la suma de los individuos
+    sumatoria = sum(poblacion)
+
+    for p in poblacion:
+        fitness.append(round(p/sumatoria,3))
+
+    return fitness
+
+
+# Funcion fitness
+def fitnesOld(poblacion, numeroIndividuos):
     
     acum = 0
     fitness = []
@@ -144,6 +161,8 @@ def mutacion_D (hijo):
 #ruleta
 def ruleta(poblacion, fitnes):
     
+    fitnes = [f*100 for f in fitnes]
+
     eleccion = random.randint(0, int(sum(fitnes)) )  
     ruleta = []
 
@@ -211,6 +230,13 @@ def poblacionelite(poblacionE,mayor1,mayor2):
     pobelite.append(mayor2)
     return pobelite
 
+#pasaje de binario a funcion objetivo
+#se pasa un gen binario a decimal y luego se evalua en la funcion objetivo
+def pasajeBinarioAFuncionObjetivo(gen):
+    """Convierte un gen binario a decimal y lo evalúa en la función objetivo. Despues lo redondea a 3 decimales.
+    Devuelve el valor de la función objetivo."""
+    return round(funcionObjetivo(decimal(gen)), 3)
+
 #pasaje de todo un arreglo de binario a decimal y de decimales se evalua en la obj
 def pasaje_arreglo(array):
     decimales=[]
@@ -271,3 +297,11 @@ def ordenarPoblacionSegunFitness(poblacion, fitness):
     
     # Convierte los resultados de tuplas a listas
     return list(poblacionOrdenada), list(fitnessOrdenado)
+
+def promedioPoblacion(poblacion):
+    prom = 0
+    for individuo in poblacion:
+        sum = pasajeBinarioAFuncionObjetivo(individuo)
+        prom += sum
+
+    return (round(prom / len(poblacion), 3))
