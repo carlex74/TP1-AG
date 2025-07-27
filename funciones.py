@@ -3,7 +3,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-
+import pandas as pd
 #limpiar pantalla
 def limpiar_pantalla():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -44,7 +44,7 @@ def decimal(binario):
 
     return decimal
 
-def fitnes(poblacion, numeroIndividuos):
+def fitnes(poblacion, numeroIndividuos)->list:
     """Calcula el fitness de cada individuo en la población.
     Devuelve una lista de fitness normalizada."""
 
@@ -247,7 +247,9 @@ def pasaje_arreglo(array):
 
 #graficas
 def graficar_convergencia(minimos, maximos, promedios, titulo_grafica):
-
+        
+        ar=[i for i in range(0, len(minimos))]
+        df=pd.DataFrame({"Iteraciones":ar,"Mayor": maximos, "Menor": minimos, "Promedio": promedios}) 
         # Crea el eje X, que corresponde al número de generaciones
         generaciones = range(1, len(minimos) + 1)
 
@@ -271,7 +273,9 @@ def graficar_convergencia(minimos, maximos, promedios, titulo_grafica):
         plt.grid(True)
 
         # Muestra la gráfica
-        plt.show()
+        plt.savefig(f'./graficas/{titulo_grafica}.png')  # Guarda la gráfica en un archivo
+        plt.show()  # Muestra la gráfica en pantalla
+        df.to_excel(f'./tablas/resultados_cilco_{titulo_grafica}.xlsx', index=False)  # Guarda los resultados en un archivo Excel
 
 #menu de iteraciones de 20, 100 y 200
 def cantidad_iteraciones():

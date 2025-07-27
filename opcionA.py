@@ -1,9 +1,11 @@
 from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia, ordenarPoblacionSegunFitness
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 ################################################################      OPCION A      ###########################################################################################
 
 def opcionA(metodoSeleccion, porcentajeMutacion = 0.05):
+    df=pd.DataFrame(columns=['Iteracion', 'Mayor', 'Menor', 'Promedio'])
 
 # =============================================================================
 # Declaraciones iniciales
@@ -105,6 +107,8 @@ def opcionA(metodoSeleccion, porcentajeMutacion = 0.05):
     print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                MAYOR                 MENOR                PROMEDIO                         ")
     for i in range (ciclos-1):
         print("        En la iteracion",i+1,"       ",mayores[i],"       ",round(funcionObjetivo(decimal(mayores[i])),3),"         ",round(funcionObjetivo(decimal(menores[i])),3), "        ", round(promedio[i],3))
+        
+        df.loc[i] = [i+1, decimal(mayores[i]), decimal(menores[i]), promedio[i]]
 
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 20 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
     print (promedio)
@@ -114,11 +118,11 @@ def opcionA(metodoSeleccion, porcentajeMutacion = 0.05):
 # =============================================================================
 # Graficas
 # =============================================================================
+    df.to_csv(f'./tablas/resultados_cilco:{ciclos}.csv', index=False)
 
     # --- 3. Generar las gráficas solicitadas según la cantidad de generaciones (ciclos)---
     graficar_convergencia(decimales_menores[:ciclos], decimales_mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)')
 
-   
 
     input("Presione una tecla . . .")
     op=input("Hacer otra corrida del mismo metodo?(y/n): ")

@@ -53,7 +53,7 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
 # Iteraciones
 # =============================================================================
 
-    ciclos= 100 #Cantidad de ciclos a realizar
+    ciclos= cantidad_iteraciones()
 
     for t in range(ciclos-1):
 
