@@ -56,34 +56,11 @@ def fitnes(poblacion, numeroIndividuos)->list:
     sumatoria = sum(poblacion)
 
     for p in poblacion:
-        fitness.append(round(p/sumatoria,3))
+        fitness.append(round(p/sumatoria,6))
 
     return fitness
 
 
-# Funcion fitness
-def fitnesOld(poblacion, numeroIndividuos):
-    
-    acum = 0
-    fitness = []
-    indice = 0
-
-    #Acumula la sumatoria de n individuos
-    while indice < numeroIndividuos:
-        x = decimal(poblacion[indice])
-        acum += funcionObjetivo(x)
-        indice += 1
-
-    indice = 0
-
-    #Determina el % de esa sumatoria
-    while indice < numeroIndividuos:
-        x = decimal(poblacion[indice])
-        fit = round((funcionObjetivo(x) / acum)*100,0)
-        fitness.append(fit)
-        indice += 1
-
-    return fitness 
 
 #fitnes con porcentajes menos de 1
 def fitnes_1(poblacion, numeroIndividuos):
@@ -161,6 +138,11 @@ def mutacion_D (hijo):
 #ruleta
 def ruleta(poblacion, fitnes):
     
+    # Sobrescribe el método __str__ para mostrar un nombre al hacer str(ruleta)
+    def __str__():
+        return "ruleta"
+    
+
     fitnes = [f*100 for f in fitnes]
 
     eleccion = random.randint(0, int(sum(fitnes)) )  
@@ -193,42 +175,6 @@ def torneo(poblacion, fitnes):
             mejorfit=fitneselec[i]
     return mejor
 
-#elitismo
-def elite(poblacion,fitnes):                        #elegimos los dos primeros numeros para comparar y luego se comparan entre los otros individualmente
-    
-    mayor1=poblacion[0]
-    mayor2=poblacion[1]
-    mayorfit1=fitnes[0]
-    mayorfit2=fitnes[1]
-    for i in range(2,10):
-        if mayorfit1 < fitnes[i]:
-            mayor1=poblacion[i]
-            mayorfit1=fitnes[i]
-        elif mayorfit2 < fitnes[i]:
-            mayor2=poblacion[i]
-            mayorfit2=fitnes[i]
-    return mayor1, mayor2
-
-#poblacion sin elites
-def poblacion_sin_elite (poblacion, fitnes, mayor1, mayor2):
-    
-    poblacionE=[]
-    fitnesE=[]
-    for i in range (10):
-        if poblacion[i]!=mayor1 and poblacion[i]!=mayor2:
-            poblacionE.append(poblacion[i])
-            fitnesE.append(fitnes[i])
-    return poblacionE, fitnesE
-            
-#poblacion elitista
-def poblacionelite(poblacionE,mayor1,mayor2):
-    
-    pobelite=[]
-    for i in range(8):
-        pobelite.append(poblacionE[i])
-    pobelite.append(mayor1)
-    pobelite.append(mayor2)
-    return pobelite
 
 #pasaje de binario a funcion objetivo
 #se pasa un gen binario a decimal y luego se evalua en la funcion objetivo
@@ -309,3 +255,68 @@ def promedioPoblacion(poblacion):
         prom += sum
 
     return (round(prom / len(poblacion), 3))
+
+
+
+# Funcion fitness
+def fitnesOld(poblacion, numeroIndividuos):
+    
+    acum = 0
+    fitness = []
+    indice = 0
+
+    #Acumula la sumatoria de n individuos
+    while indice < numeroIndividuos:
+        x = decimal(poblacion[indice])
+        acum += funcionObjetivo(x)
+        indice += 1
+
+    indice = 0
+
+    #Determina el % de esa sumatoria
+    while indice < numeroIndividuos:
+        x = decimal(poblacion[indice])
+        fit = round((funcionObjetivo(x) / acum)*100,0)
+        fitness.append(fit)
+        indice += 1
+
+    return fitness 
+
+
+#elitismo
+def elite(poblacion,fitnes):                        #elegimos los dos primeros numeros para comparar y luego se comparan entre los otros individualmente
+    
+
+    mayor1=poblacion[0]
+    mayor2=poblacion[1]
+    mayorfit1=fitnes[0]
+    mayorfit2=fitnes[1]
+    for i in range(2,10):
+        if mayorfit1 < fitnes[i]:
+            mayor1=poblacion[i]
+            mayorfit1=fitnes[i]
+        elif mayorfit2 < fitnes[i]:
+            mayor2=poblacion[i]
+            mayorfit2=fitnes[i]
+    return mayor1, mayor2
+
+#poblacion sin elites
+def poblacion_sin_elite (poblacion, fitnes, mayor1, mayor2):
+    
+    poblacionE=[]
+    fitnesE=[]
+    for i in range (10):
+        if poblacion[i]!=mayor1 and poblacion[i]!=mayor2:
+            poblacionE.append(poblacion[i])
+            fitnesE.append(fitnes[i])
+    return poblacionE, fitnesE
+            
+#poblacion elitista
+def poblacionelite(poblacionE,mayor1,mayor2):
+    
+    pobelite=[]
+    for i in range(8):
+        pobelite.append(poblacionE[i])
+    pobelite.append(mayor1)
+    pobelite.append(mayor2)
+    return pobelite

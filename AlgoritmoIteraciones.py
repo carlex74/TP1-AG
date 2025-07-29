@@ -1,3 +1,5 @@
+import random
+from matplotlib.pylab import rand
 from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia, ordenarPoblacionSegunFitness
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,6 +21,7 @@ def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
     promedio=[]#Muestra final 
     mutaciones=[] #Muestra final, lista bool de si hubo o no mutacion (Obsoleto)
     mutaciones1=[] #Muestra final, lista bool de si hubo o no mutacion (Obsoleto)
+    cantCruces = 2 #Cantidad de cruces por iteracion
 
 # =============================================================================
 # Poblacion inicial
@@ -70,6 +73,10 @@ def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
 
 
         #Se hace el crossover
+# =============================================================================
+# CROSSOVER
+# =============================================================================
+
         hijos = []
         for i in range(len(padres)):
             potencialesHijos = CROSSOVER(padres[i][0],padres[i][1],porcentajeCrossover)
@@ -86,9 +93,21 @@ def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
                 hijo1,muta=mutacion(hijos[i][0],porcentajeMutacion)    
                 hijos[i] = (hijo0,hijo1)
 
+            """
             #reemplazamos los padres x los hijos
             poblacion[i] = hijos[i][0]
             poblacion[len(poblacion)-i-1] = hijos[i][1]     
+            """
+        #Reemplazamos los padres por los hijos
+        for i in range(cantCruces):
+            rand1 = random.randint(0, len(poblacion)-1)
+            rand2 = random.randint(0, len(poblacion)-1)
+            while rand1 == rand2:
+                rand2 = random.randint(0, len(poblacion)-1)
+    
+            poblacion[rand1] = hijos[i][0]
+            poblacion[rand2] = hijos[i][1]  
+
 
         #Reordenar nueva poblacion
         fit=fitnes(poblacion,len(poblacion))
