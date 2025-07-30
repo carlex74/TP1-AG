@@ -1,9 +1,10 @@
 import random
 from matplotlib.pylab import rand
-from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia, ordenarPoblacionSegunFitness
+from funciones import cantidad_iteraciones,generarPoblacion,ruleta,decimal,funcionObjetivo,mutacion, CROSSOVER,fitnes,pasaje_arreglo,graficar_convergencia, ordenarPoblacionSegunFitness
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from funciones import informarError
 ################################################################      OPCION A      ###########################################################################################
 
 def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
@@ -18,10 +19,9 @@ def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
     prom=0
     menores=[]#Muestra final 
     mayores=[] #Muestra final 
-    promedio=[]#Muestra final 
-    mutaciones=[] #Muestra final, lista bool de si hubo o no mutacion (Obsoleto)
-    mutaciones1=[] #Muestra final, lista bool de si hubo o no mutacion (Obsoleto)
+    promedio=[]#Muestra final
     cantCruces = 2 #Cantidad de cruces por iteracion
+
 
 # =============================================================================
 # Poblacion inicial
@@ -64,12 +64,13 @@ def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
         #Seleccion de padres
         for i in range(int(len(poblacion)/2)): 
             padres.append(((metodoSeleccion(poblacion,fit)),metodoSeleccion(poblacion,fit)))
-            """
-            #Verificar que no sea el mismo padre
-            while padres[i][0] == padres[i][1]: 
-                print("Dando vueltas?")
-                padres[i] = (padres[i][0],metodoSeleccion(poblacion,fit))
-            """
+            countForParents = 0
+            while padres[i][0] == padres[i][1]:  # Asegurarse de que los padres sean diferentes
+                padres[i] = ((metodoSeleccion(poblacion,fit)),metodoSeleccion(poblacion,fit))
+                countForParents += 1
+                if countForParents > 100:  # Evitar un bucle infinito
+                    informarError("No se pudieron seleccionar padres diferentes después de 100 intentos. Cantidad intentos: " + str(countForParents) + "\n")
+                    break
 
 
         #Se hace el crossover
@@ -92,12 +93,7 @@ def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
                 hijo0,muta1=mutacion(hijos[i][0],porcentajeMutacion)
                 hijo1,muta=mutacion(hijos[i][0],porcentajeMutacion)    
                 hijos[i] = (hijo0,hijo1)
-
-            """
-            #reemplazamos los padres x los hijos
-            poblacion[i] = hijos[i][0]
-            poblacion[len(poblacion)-i-1] = hijos[i][1]     
-            """
+                
         #Reemplazamos los padres por los hijos
         for i in range(cantCruces):
             rand1 = random.randint(0, len(poblacion)-1)

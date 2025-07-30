@@ -1,4 +1,4 @@
-from funciones import limpiar_pantalla,cantidad_iteraciones,generarPoblacion,ruleta,torneo,decimal,mutacion_D,funcionObjetivo,mayorminimo,mutacion, CROSSOVER,fitnes,elite,poblacion_sin_elite,poblacionelite,pasaje_arreglo,graficar_convergencia, ordenarPoblacionSegunFitness, pasajeBinarioAFuncionObjetivo, promedioPoblacion
+from funciones import cantidad_iteraciones,generarPoblacion,ruleta,decimal,funcionObjetivo,mutacion, CROSSOVER,fitnes,graficar_convergencia, ordenarPoblacionSegunFitness, pasajeBinarioAFuncionObjetivo, promedioPoblacion
 import matplotlib.pyplot as plt
 import numpy as np
 ################################################################      OPCION A      ###########################################################################################
@@ -57,6 +57,12 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
 
     for t in range(ciclos-1):
 
+        padres = []
+
+        #Seleccion de padres
+        for i in range(int((len(poblacion) - 2)/2)): 
+            padres.append(((metodoSeleccion(poblacion,fit)),metodoSeleccion(poblacion,fit)))
+
         # =============================================================================
         # Seleccion de elites
         # =============================================================================
@@ -73,11 +79,6 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
         fit.remove(mayorFit2)
 
 
-        padres = []
-
-        #Seleccion de padres
-        for i in range(int(len(poblacion)/2)): 
-            padres.append(((metodoSeleccion(poblacion,fit)),metodoSeleccion(poblacion,fit)))
 
         #Se hace el crossover
         hijos = []

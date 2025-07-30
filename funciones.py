@@ -56,7 +56,7 @@ def fitnes(poblacion, numeroIndividuos)->list:
     sumatoria = sum(poblacion)
 
     for p in poblacion:
-        fitness.append(round(p/sumatoria,6))
+        fitness.append(round(p/sumatoria,8))
 
     return fitness
 
@@ -80,7 +80,7 @@ def fitnes_1(poblacion, numeroIndividuos):
     #Determina el % de esa sumatoria
     while indice < numeroIndividuos:
         x = decimal(poblacion[indice])
-        fit = round((funcionObjetivo(x) / acum),3)
+        fit = round((funcionObjetivo(x) / acum),8)
         fitness.append(fit)
         indice += 1
 
@@ -181,15 +181,34 @@ def torneo(poblacion, fitnes):
 def pasajeBinarioAFuncionObjetivo(gen):
     """Convierte un gen binario a decimal y lo evalúa en la función objetivo. Despues lo redondea a 3 decimales.
     Devuelve el valor de la función objetivo."""
-    return round(funcionObjetivo(decimal(gen)), 3)
+    return round(funcionObjetivo(decimal(gen)), 8)
 
 #pasaje de todo un arreglo de binario a decimal y de decimales se evalua en la obj
 def pasaje_arreglo(array):
     decimales=[]
     for i in range (len(array)):
-        y=round(funcionObjetivo(decimal(array[i])),3)
+        y=round(funcionObjetivo(decimal(array[i])),8)
         decimales.append(y)
     return decimales
+
+def ordenarPoblacionSegunFitness(poblacion, fitness):
+    # Combina las listas en pares y ordena según el fit (de mayor a menor)
+    pares_ordenados = sorted(zip(poblacion, fitness), key=lambda par: par[1], reverse=True)
+    
+    # Separa las listas ordenadas
+    poblacionOrdenada, fitnessOrdenado = zip(*pares_ordenados)
+    
+    # Convierte los resultados de tuplas a listas
+    return list(poblacionOrdenada), list(fitnessOrdenado)
+
+def promedioPoblacion(poblacion):
+    prom = 0
+    for individuo in poblacion:
+        sum = pasajeBinarioAFuncionObjetivo(individuo)
+        prom += sum
+
+    return (round(prom / len(poblacion), 8))
+
 
 #graficas
 def graficar_convergencia(minimos, maximos, promedios, titulo_grafica):
@@ -238,85 +257,12 @@ def cantidad_iteraciones():
     """
     return iteracion
 
-def ordenarPoblacionSegunFitness(poblacion, fitness):
-    # Combina las listas en pares y ordena según el fit (de mayor a menor)
-    pares_ordenados = sorted(zip(poblacion, fitness), key=lambda par: par[1], reverse=True)
-    
-    # Separa las listas ordenadas
-    poblacionOrdenada, fitnessOrdenado = zip(*pares_ordenados)
-    
-    # Convierte los resultados de tuplas a listas
-    return list(poblacionOrdenada), list(fitnessOrdenado)
 
-def promedioPoblacion(poblacion):
-    prom = 0
-    for individuo in poblacion:
-        sum = pasajeBinarioAFuncionObjetivo(individuo)
-        prom += sum
-
-    return (round(prom / len(poblacion), 3))
+def informarError(descripcionError ):
+    """Informa un error en la ejecución del programa y guarda el mensaje en un archivo de texto."""
+    ruta_errores = os.path.join("errores", "errores.txt")
+    with open(ruta_errores, "a") as archivo:
+        archivo.write(descripcionError + "\n")
+    print("\n\nSe ha producido un error. Por favor, revise el archivo de errores.\n\n")
 
 
-
-# Funcion fitness
-def fitnesOld(poblacion, numeroIndividuos):
-    
-    acum = 0
-    fitness = []
-    indice = 0
-
-    #Acumula la sumatoria de n individuos
-    while indice < numeroIndividuos:
-        x = decimal(poblacion[indice])
-        acum += funcionObjetivo(x)
-        indice += 1
-
-    indice = 0
-
-    #Determina el % de esa sumatoria
-    while indice < numeroIndividuos:
-        x = decimal(poblacion[indice])
-        fit = round((funcionObjetivo(x) / acum)*100,0)
-        fitness.append(fit)
-        indice += 1
-
-    return fitness 
-
-
-#elitismo
-def elite(poblacion,fitnes):                        #elegimos los dos primeros numeros para comparar y luego se comparan entre los otros individualmente
-    
-
-    mayor1=poblacion[0]
-    mayor2=poblacion[1]
-    mayorfit1=fitnes[0]
-    mayorfit2=fitnes[1]
-    for i in range(2,10):
-        if mayorfit1 < fitnes[i]:
-            mayor1=poblacion[i]
-            mayorfit1=fitnes[i]
-        elif mayorfit2 < fitnes[i]:
-            mayor2=poblacion[i]
-            mayorfit2=fitnes[i]
-    return mayor1, mayor2
-
-#poblacion sin elites
-def poblacion_sin_elite (poblacion, fitnes, mayor1, mayor2):
-    
-    poblacionE=[]
-    fitnesE=[]
-    for i in range (10):
-        if poblacion[i]!=mayor1 and poblacion[i]!=mayor2:
-            poblacionE.append(poblacion[i])
-            fitnesE.append(fitnes[i])
-    return poblacionE, fitnesE
-            
-#poblacion elitista
-def poblacionelite(poblacionE,mayor1,mayor2):
-    
-    pobelite=[]
-    for i in range(8):
-        pobelite.append(poblacionE[i])
-    pobelite.append(mayor1)
-    pobelite.append(mayor2)
-    return pobelite
