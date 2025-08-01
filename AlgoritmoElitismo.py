@@ -15,6 +15,7 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
     prom=0
     menores=[]#Muestra final 
     mayores=[] #Muestra final 
+    mayoresbinario=[]
     promedio=[]#Muestra final 
     mayoresFit=[]
     menoresFit=[]
@@ -27,6 +28,7 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
     fit=fitnes(poblacion,len(poblacion))
     poblacion, fit = ordenarPoblacionSegunFitness(poblacion,fit)
     #Mayores y promedio                
+    mayoresbinario.append(poblacion[0])
     mayor,menor= pasajeBinarioAFuncionObjetivo(poblacion[0]), pasajeBinarioAFuncionObjetivo(poblacion[-1])
     menores.append(menor)
     mayores.append(mayor)
@@ -118,6 +120,7 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
         promedio.append(promedioPoblacion(poblacion))
 
         #Mayores y promedio  
+        mayoresbinario.append(poblacion[0])
         mayor = pasajeBinarioAFuncionObjetivo(poblacion[0])
         menor = pasajeBinarioAFuncionObjetivo(poblacion[-1])
 
@@ -137,11 +140,11 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
 # =============================================================================    
 
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 1 a 20 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
-    print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                MAYOR                 MENOR                PROMEDIO                         ")
+    print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                           MAYOR                  MENOR                PROMEDIO                         ")
     for i in range (ciclos-1):
-        print("        En la iteracion",i+1,"       ", mayores[i],"         ",menores[i],"        ", round(promedio[i],3))
+        print("        En la iteracion",i+1,"       ",mayoresbinario[i],"         ", mayores[i],"         ",menores[i],"        ", round(promedio[i],10))
 
-    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 20 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
+    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
     print (promedio)
 
 # =============================================================================
@@ -149,7 +152,7 @@ def AlgElitismo(metodoSeleccion, porcentajeMutacion = 0.05):
 # =============================================================================
 
     # --- 3. Generar las gráficas solicitadas según la cantidad de generaciones (ciclos)---
-    graficar_convergencia(menores[:ciclos], mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)')
+    graficar_convergencia(menores[:ciclos], mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)',mayoresbinario[:ciclos])
 
    
 

@@ -126,11 +126,11 @@ def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
 # =============================================================================    
 
     print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 1 a 20 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
-    print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                MAYOR                 MENOR                PROMEDIO                         ")
+    print("                                        CROMOSOMA CORRESPONDIENTE AL MAXIMO                                                         MAYOR                  MENOR                PROMEDIO                         ")
     for i in range (ciclos-1):
-        print("        En la iteracion",i+1,"       ",mayores[i],"       ",round(funcionObjetivo(decimal(mayores[i])),3),"         ",round(funcionObjetivo(decimal(menores[i])),3), "        ", round(promedio[i],3))
+        print("        En la iteracion",i+1,"       ",mayores[i],"       ",round(funcionObjetivo(decimal(mayores[i])),10),"         ",round(funcionObjetivo(decimal(menores[i])),10), "        ", round(promedio[i],10))
         """ df.loc[i] = [i+1, decimal(mayores[i]), decimal(menores[i]), promedio[i]] """
-    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_TABLA FINAL 20 a 100 _*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
+    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_")
     print (promedio)
     decimales_mayores=pasaje_arreglo(mayores)
     decimales_menores=pasaje_arreglo(menores)
@@ -140,7 +140,7 @@ def AlgoritmoIteraciones(metodoSeleccion, porcentajeMutacion = 0.05):
 # =============================================================================
 
     # --- 3. Generar las gráficas solicitadas según la cantidad de generaciones (ciclos)---
-    graficar_convergencia(decimales_menores[:ciclos], decimales_mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)')
+    graficar_convergencia(decimales_menores[:ciclos], decimales_mayores[:ciclos], promedio[:ciclos], 'Evolución del Fitness (' + str(ciclos) + ' Generaciones)',mayores[:ciclos])
 
    
     """ df.to_csv(f'./tablas/resultados_cilco_{ciclos}.csv', index=False) """

@@ -211,36 +211,38 @@ def promedioPoblacion(poblacion):
 
 
 #graficas
-def graficar_convergencia(minimos, maximos, promedios, titulo_grafica):
-        
-        ar=[i for i in range(0, len(minimos))]
-        df=pd.DataFrame({"Iteraciones":ar,"Mayor": maximos, "Menor": minimos, "Promedio": promedios}) 
-        # Crea el eje X, que corresponde al número de generaciones
-        generaciones = range(1, len(minimos) + 1)
+def graficar_convergencia(minimos, maximos, promedios, titulo_grafica, mayoresbinario):
+    ar = [i for i in range(0, len(minimos))]
+    df = pd.DataFrame({
+        "Población": ar,
+        "Cromosoma correspondiente al máximo": mayoresbinario,
+        "Máximo": maximos,
+        "Mínimo": minimos,
+        "Promedio": promedios
+    })
 
-        # Crea la figura y los ejes para la gráfica
-        plt.figure(figsize=(12, 7))
+    # Formateo con 10 decimales
+    df["Máximo"] = df["Máximo"].map(lambda x: f"{x:.10f}")
+    df["Mínimo"] = df["Mínimo"].map(lambda x: f"{x:.10f}")
+    df["Promedio"] = df["Promedio"].map(lambda x: f"{x:.10f}")
 
-        # Dibuja cada línea (Mínimo, Máximo, Promedio)
-        plt.plot(generaciones, maximos, color='g', linestyle='-', marker='o', markersize=4, label='Máximo Fitness')
-        plt.plot(generaciones, promedios, color='b', linestyle='-', marker='o', markersize=4, label='Promedio Fitness')
-        plt.plot(generaciones, minimos, color='r', linestyle='-', marker='o', markersize=4, label='Mínimo Fitness')
+    generaciones = range(1, len(minimos) + 1)
+    plt.figure(figsize=(12, 7))
+    plt.plot(generaciones, maximos, color='g', marker='o', markersize=4, label='Máximo Fitness')
+    plt.plot(generaciones, promedios, color='b', marker='o', markersize=4, label='Promedio Fitness')
+    plt.plot(generaciones, minimos, color='r', marker='o', markersize=4, label='Mínimo Fitness')
 
-        # Añade Título y etiquetas a los ejes
-        plt.title(titulo_grafica, fontsize=16)
-        plt.xlabel('Generación', fontsize=12)
-        plt.ylabel('Valor de la Función Objetivo (Fitness)', fontsize=12)
 
-        # Añade la leyenda para identificar cada línea
-        plt.legend()
+    plt.title(titulo_grafica, fontsize=16)
+    plt.xlabel('Generación', fontsize=12)
+    plt.ylabel('Valor de la Función Objetivo (Fitness)', fontsize=12)
+    plt.legend()
+    plt.grid(True)
 
-        # Añade una cuadrícula para facilitar la lectura
-        plt.grid(True)
+    plt.savefig(f'./graficas/{titulo_grafica}.png')
+    plt.show()
 
-        # Muestra la gráfica
-        plt.savefig(f'./graficas/{titulo_grafica}.png')  # Guarda la gráfica en un archivo
-        plt.show()  # Muestra la gráfica en pantalla
-        df.to_excel(f'./tablas/resultados_cilco_{titulo_grafica}.xlsx', index=False)  # Guarda los resultados en un archivo Excel
+    df.to_excel(f'./tablas/resultados_cilco_{titulo_grafica}.xlsx', index=False)
 
 #menu de iteraciones de 20, 100 y 200
 def cantidad_iteraciones():
